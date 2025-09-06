@@ -25,8 +25,8 @@ A Chrome extension that enables easy Picture-in-Picture (PiP) mode activation fo
 
 1. Download or clone this repository:
 ```bash
-git clone https://github.com/AnonBOTpl/chrome-pip-extension.git
-cd chrome-pip-extension
+git clone https://github.com/AnonBOTpl/Chrome-Picture-in-Picture-Extension.git
+cd Chrome-Picture-in-Picture-Extension
 ```
 
 2. Open Chrome and navigate to `chrome://extensions/`
