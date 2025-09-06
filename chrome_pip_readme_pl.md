@@ -25,8 +25,8 @@ Rozszerzenie Chrome umożliwiające łatwe uruchamianie trybu Picture-in-Picture
 
 1. Pobierz lub sklonuj to repozytorium:
 ```bash
-git clone https://github.com/AnonBOTpl/chrome-pip-extension.git
-cd chrome-pip-extension
+git clone https://github.com/AnonBOTpl/Chrome-Picture-in-Picture-Extension.git
+cd Chrome-Picture-in-Picture-Extension
 ```
 
 2. Otwórz Chrome i przejdź do `chrome://extensions/`
