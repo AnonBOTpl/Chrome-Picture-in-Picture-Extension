@@ -1,0 +1,56 @@
+{
+  "extensionName": {
+    "message": "Easy Picture-in-Picture"
+  },
+  "extensionDescription": {
+    "message": "Easy video extraction to Picture-in-Picture window"
+  },
+  "popupTitle": {
+    "message": "Picture-in-Picture"
+  },
+  "popupHeader": {
+    "message": "📺 Picture-in-Picture"
+  },
+  "activatePipButton": {
+    "message": "Activate PiP for current video"
+  },
+  "findVideosButton": {
+    "message": "Find videos on page"
+  },
+  "howToUse": {
+    "message": "How to use:"
+  },
+  "shortcutCtrlAltP": {
+    "message": "quick PiP"
+  },
+  "shortcutDoubleClick": {
+    "message": "Double click"
+  },
+  "shortcutHoverButton": {
+    "message": "Button 📺"
+  },
+  "hoverOnVideo": {
+    "message": "on video hover"
+  },
+  "statusReady": {
+    "message": "Ready to use"
+  },
+  "pipActivated": {
+    "message": "PiP activated!"
+  },
+  "pipNotAvailable": {
+    "message": "PiP not available for this video"
+  },
+  "noVideoFound": {
+    "message": "No video found on page"
+  },
+  "videosFound": {
+    "message": "Found {count} video(s) ({playing} playing)"
+  },
+  "errorMessage": {
+    "message": "Error:"
+  },
+  "pipTooltip": {
+    "message": "Picture-in-Picture (Ctrl+Alt+P)"
+  }
+}
