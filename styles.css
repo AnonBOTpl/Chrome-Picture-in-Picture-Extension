@@ -1,0 +1,48 @@
+.pip-button-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: auto;
+}
+
+.pip-button {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.pip-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.pip-button:active {
+  transform: scale(0.95);
+}
+
+/* Stylizacja dla video które obsługują PiP */
+video[pip-enabled] {
+  cursor: pointer;
+}
+
+/* Animacja dla przycisku */
+@keyframes pipPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.pip-button.active {
+  animation: pipPulse 1s infinite;
+}
