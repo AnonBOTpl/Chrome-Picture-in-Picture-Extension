@@ -10,6 +10,7 @@ async function enterPictureInPicture(video) {
     }
   } catch (error) {
     console.log('Nie można włączyć/wyłączyć PiP:', error);
+    throw error;
   }
 }
 
@@ -17,18 +18,23 @@ async function enterPictureInPicture(video) {
 let settings = {
   showHoverBtn: true,
   enableDoubleClick: true,
+  enableAutoPip: false,
   blacklist: []
 };
+
+let autoPipedVideo = null;
 
 // Aktualizuj ustawienia
 function updateSettings(callback) {
   chrome.storage.sync.get({
     showHoverBtn: true,
     enableDoubleClick: true,
+    enableAutoPip: false,
     blacklist: ''
   }, (items) => {
     settings.showHoverBtn = items.showHoverBtn;
     settings.enableDoubleClick = items.enableDoubleClick;
+    settings.enableAutoPip = items.enableAutoPip;
     settings.blacklist = items.blacklist.split('\n').map(d => d.trim()).filter(d => d);
     if (callback) callback();
   });
@@ -162,6 +168,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
     if (targetVideo) {
       enterPictureInPicture(targetVideo);
+    }
+  } else if (request.action === 'tabLostFocus' && settings.enableAutoPip) {
+    // Sprawdź czy odtwarza się jakieś wideo i nie jesteśmy na czarnej liście
+    if (isDomainBlacklisted()) return;
+    const videos = document.querySelectorAll('video');
+    for (let video of videos) {
+      if (!video.paused && !video.ended && video.readyState > 2) {
+        if (!document.pictureInPictureElement) {
+          enterPictureInPicture(video).then(() => {
+            autoPipedVideo = video;
+          }).catch(e => console.log('Auto-PiP blocked by browser (requires user gesture usually):', e));
+        }
+        break;
+      }
+    }
+  } else if (request.action === 'tabGainedFocus' && settings.enableAutoPip) {
+    // Jeśli wróciliśmy na kartę i to my wywołaliśmy Auto-PiP, wyjdźmy z niego
+    if (document.pictureInPictureElement && autoPipedVideo === document.pictureInPictureElement) {
+      document.exitPictureInPicture().catch(() => {});
+      autoPipedVideo = null;
     }
   }
 });
