@@ -45,7 +45,15 @@
     "message": "No video found on page"
   },
   "videosFound": {
-    "message": "Found {count} video(s) ({playing} playing)"
+    "message": "Found $COUNT$ video(s) ($PLAYING$ playing)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      },
+      "playing": {
+        "content": "$2"
+      }
+    }
   },
   "errorMessage": {
     "message": "Error:"
