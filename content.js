@@ -2,20 +2,24 @@
 async function enterPictureInPicture(video) {
   try {
     if (document.pictureInPictureEnabled && !video.disablePictureInPicture) {
-      await video.requestPictureInPicture();
+      if (document.pictureInPictureElement === video) {
+        await document.exitPictureInPicture();
+      } else {
+        await video.requestPictureInPicture();
+      }
     }
   } catch (error) {
-    console.log('Nie można włączyć PiP:', error);
+    console.log('Nie można włączyć/wyłączyć PiP:', error);
   }
 }
 
 // Funkcja do dodawania przycisku PiP do video
 function addPiPButton(video) {
   // Sprawdź czy przycisk już istnieje
-  if (video.parentNode.querySelector('.pip-button')) {
+  if (video.hasAttribute('data-pip-button-added') || !video.parentNode) {
     return;
   }
-
+  video.setAttribute('data-pip-button-added', 'true');
   // Stwórz kontener dla przycisku
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'pip-button-container';
