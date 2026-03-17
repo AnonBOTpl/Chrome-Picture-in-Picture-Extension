@@ -60,5 +60,26 @@
   },
   "pipTooltip": {
     "message": "Picture-in-Picture (Ctrl+Alt+P)"
+  },
+  "shortcutTogglePip": {
+    "message": "Toggle Picture-in-Picture"
+  },
+  "optionsTitle": {
+    "message": "Extension Options"
+  },
+  "optShowHoverBtn": {
+    "message": "Show hover button on videos"
+  },
+  "optEnableDoubleClick": {
+    "message": "Enable double click to toggle PiP"
+  },
+  "optBlacklist": {
+    "message": "Blacklisted domains (one per line)"
+  },
+  "optSave": {
+    "message": "Save"
+  },
+  "optSavedMsg": {
+    "message": "Options saved."
   }
 }

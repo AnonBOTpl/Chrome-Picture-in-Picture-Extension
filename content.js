@@ -13,8 +13,38 @@ async function enterPictureInPicture(video) {
   }
 }
 
+// Zmienne do ustawień
+let settings = {
+  showHoverBtn: true,
+  enableDoubleClick: true,
+  blacklist: []
+};
+
+// Aktualizuj ustawienia
+function updateSettings(callback) {
+  chrome.storage.sync.get({
+    showHoverBtn: true,
+    enableDoubleClick: true,
+    blacklist: ''
+  }, (items) => {
+    settings.showHoverBtn = items.showHoverBtn;
+    settings.enableDoubleClick = items.enableDoubleClick;
+    settings.blacklist = items.blacklist.split('\n').map(d => d.trim()).filter(d => d);
+    if (callback) callback();
+  });
+}
+
+function isDomainBlacklisted() {
+  const currentDomain = window.location.hostname;
+  return settings.blacklist.some(domain => currentDomain.includes(domain));
+}
+
 // Funkcja do dodawania przycisku PiP do video
 function addPiPButton(video) {
+  if (isDomainBlacklisted() || !settings.showHoverBtn) {
+    return;
+  }
+
   // Sprawdź czy przycisk już istnieje
   if (video.hasAttribute('data-pip-button-added') || !video.parentNode) {
     return;
@@ -26,7 +56,12 @@ function addPiPButton(video) {
   
   const button = document.createElement('button');
   button.className = 'pip-button';
-  button.innerHTML = '📺';
+  button.innerHTML = `
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+      <rect x="12" y="12" width="7" height="7" rx="1" ry="1"></rect>
+    </svg>
+  `;
   
   // Użyj tłumaczenia dla tooltip
   button.title = chrome.i18n.getMessage('pipTooltip');
@@ -98,14 +133,43 @@ document.addEventListener('keydown', (e) => {
 
 // Podwójne kliknięcie na video = PiP
 document.addEventListener('dblclick', (e) => {
-  if (e.target.tagName === 'VIDEO') {
+  if (e.target.tagName === 'VIDEO' && settings.enableDoubleClick) {
     e.preventDefault();
     enterPictureInPicture(e.target);
   }
 });
 
+// Aktualizacja po zmianie ustawień w locie
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync') {
+    updateSettings();
+  }
+});
+
+// Nasłuchuj wiadomości od background script
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'togglePiP') {
+    const videos = document.querySelectorAll('video');
+    let targetVideo = null;
+    for (let video of videos) {
+      if (!video.paused) {
+        targetVideo = video;
+        break;
+      }
+    }
+    if (!targetVideo && videos.length > 0) {
+      targetVideo = videos[0];
+    }
+    if (targetVideo) {
+      enterPictureInPicture(targetVideo);
+    }
+  }
+});
+
 // Uruchom przy załadowaniu strony
-document.addEventListener('DOMContentLoaded', findAndProcessVideos);
+document.addEventListener('DOMContentLoaded', () => {
+  updateSettings(findAndProcessVideos);
+});
 
 // Uruchom dla dynamicznie dodawanego contentu
 const observer = new MutationObserver((mutations) => {
