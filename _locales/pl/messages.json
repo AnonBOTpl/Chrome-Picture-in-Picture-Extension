@@ -59,7 +59,7 @@
     "message": "Błąd:"
   },
   "pipTooltip": {
-    "message": "Picture-in-Picture (Ctrl+Alt+P)"
+    "message": "Picture-in-Picture (Ctrl+Shift+P)"
   },
   "shortcutTogglePip": {
     "message": "Włącz/Wyłącz Picture-in-Picture"
