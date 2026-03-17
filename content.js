@@ -36,6 +36,10 @@ function updateSettings(callback) {
     settings.enableDoubleClick = items.enableDoubleClick;
     settings.enableAutoPip = items.enableAutoPip;
     settings.blacklist = items.blacklist.split('\n').map(d => d.trim()).filter(d => d);
+
+    // Zastosuj nowe ustawienie autoPiP dla wszystkich obecnych wideo
+    document.querySelectorAll('video').forEach(applyAutoPipToVideo);
+
     if (callback) callback();
   });
 }
@@ -46,7 +50,17 @@ function isDomainBlacklisted() {
 }
 
 // Funkcja do dodawania przycisku PiP do video
+// Funkcja aplikująca własność autoPictureInPicture
+function applyAutoPipToVideo(video) {
+  if (isDomainBlacklisted()) return;
+  if ('autoPictureInPicture' in video) {
+    video.autoPictureInPicture = settings.enableAutoPip;
+  }
+}
+
 function addPiPButton(video) {
+  applyAutoPipToVideo(video);
+
   if (isDomainBlacklisted() || !settings.showHoverBtn) {
     return;
   }
@@ -169,32 +183,44 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (targetVideo) {
       enterPictureInPicture(targetVideo);
     }
-  } else if (request.action === 'tabLostFocus' && settings.enableAutoPip) {
-    // Sprawdź czy odtwarza się jakieś wideo i nie jesteśmy na czarnej liście
-    if (isDomainBlacklisted()) return;
+  }
+});
+
+
+// Uruchom od razu lub poczekaj na załadowanie
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    updateSettings(findAndProcessVideos);
+  });
+} else {
+  updateSettings(findAndProcessVideos);
+}
+
+// Auto-PiP na podstawie widoczności dokumentu (zmiana karty lub zminimalizowanie okna)
+document.addEventListener('visibilitychange', () => {
+  if (!settings.enableAutoPip || isDomainBlacklisted()) return;
+
+  if (document.visibilityState === 'hidden') {
+    // Karta przestała być widoczna - szukamy odtwarzanego wideo
     const videos = document.querySelectorAll('video');
     for (let video of videos) {
       if (!video.paused && !video.ended && video.readyState > 2) {
         if (!document.pictureInPictureElement) {
-          enterPictureInPicture(video).then(() => {
+          // Używamy requestPictureInPicture bezpośrednio, aby uniknąć ewentualnego toggle w enterPictureInPicture
+          video.requestPictureInPicture().then(() => {
             autoPipedVideo = video;
-          }).catch(e => console.log('Auto-PiP blocked by browser (requires user gesture usually):', e));
+          }).catch(e => console.log('Auto-PiP zablokowane przez przeglądarkę (wymagana interakcja użytkownika):', e));
         }
         break;
       }
     }
-  } else if (request.action === 'tabGainedFocus' && settings.enableAutoPip) {
-    // Jeśli wróciliśmy na kartę i to my wywołaliśmy Auto-PiP, wyjdźmy z niego
+  } else if (document.visibilityState === 'visible') {
+    // Karta znów jest widoczna - jeśli to my uruchomiliśmy PiP, wyłączmy je
     if (document.pictureInPictureElement && autoPipedVideo === document.pictureInPictureElement) {
       document.exitPictureInPicture().catch(() => {});
       autoPipedVideo = null;
     }
   }
-});
-
-// Uruchom przy załadowaniu strony
-document.addEventListener('DOMContentLoaded', () => {
-  updateSettings(findAndProcessVideos);
 });
 
 // Uruchom dla dynamicznie dodawanego contentu
