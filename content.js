@@ -18,27 +18,19 @@ async function enterPictureInPicture(video) {
 let settings = {
   showHoverBtn: true,
   enableDoubleClick: true,
-  enableAutoPip: false,
   blacklist: []
 };
-
-let autoPipedVideo = null;
 
 // Aktualizuj ustawienia
 function updateSettings(callback) {
   chrome.storage.sync.get({
     showHoverBtn: true,
     enableDoubleClick: true,
-    enableAutoPip: false,
     blacklist: ''
   }, (items) => {
     settings.showHoverBtn = items.showHoverBtn;
     settings.enableDoubleClick = items.enableDoubleClick;
-    settings.enableAutoPip = items.enableAutoPip;
     settings.blacklist = items.blacklist.split('\n').map(d => d.trim()).filter(d => d);
-
-    // Zastosuj nowe ustawienie autoPiP dla wszystkich obecnych wideo
-    document.querySelectorAll('video').forEach(applyAutoPipToVideo);
 
     if (callback) callback();
   });
@@ -50,17 +42,7 @@ function isDomainBlacklisted() {
 }
 
 // Funkcja do dodawania przycisku PiP do video
-// Funkcja aplikująca własność autoPictureInPicture
-function applyAutoPipToVideo(video) {
-  if (isDomainBlacklisted()) return;
-  if ('autoPictureInPicture' in video) {
-    video.autoPictureInPicture = settings.enableAutoPip;
-  }
-}
-
 function addPiPButton(video) {
-  applyAutoPipToVideo(video);
-
   if (isDomainBlacklisted() || !settings.showHoverBtn) {
     return;
   }
@@ -195,33 +177,6 @@ if (document.readyState === 'loading') {
 } else {
   updateSettings(findAndProcessVideos);
 }
-
-// Auto-PiP na podstawie widoczności dokumentu (zmiana karty lub zminimalizowanie okna)
-document.addEventListener('visibilitychange', () => {
-  if (!settings.enableAutoPip || isDomainBlacklisted()) return;
-
-  if (document.visibilityState === 'hidden') {
-    // Karta przestała być widoczna - szukamy odtwarzanego wideo
-    const videos = document.querySelectorAll('video');
-    for (let video of videos) {
-      if (!video.paused && !video.ended && video.readyState > 2) {
-        if (!document.pictureInPictureElement) {
-          // Używamy requestPictureInPicture bezpośrednio, aby uniknąć ewentualnego toggle w enterPictureInPicture
-          video.requestPictureInPicture().then(() => {
-            autoPipedVideo = video;
-          }).catch(e => console.log('Auto-PiP zablokowane przez przeglądarkę (wymagana interakcja użytkownika):', e));
-        }
-        break;
-      }
-    }
-  } else if (document.visibilityState === 'visible') {
-    // Karta znów jest widoczna - jeśli to my uruchomiliśmy PiP, wyłączmy je
-    if (document.pictureInPictureElement && autoPipedVideo === document.pictureInPictureElement) {
-      document.exitPictureInPicture().catch(() => {});
-      autoPipedVideo = null;
-    }
-  }
-});
 
 // Uruchom dla dynamicznie dodawanego contentu
 const observer = new MutationObserver((mutations) => {

@@ -10,14 +10,18 @@ A Chrome extension that enables easy Picture-in-Picture (PiP) mode activation fo
 
 ## ✨ Features
 
-- **Automatic video detection** - Extension automatically finds all video elements on the page
-- **Hover button** - A PiP button appears in the top-right corner when hovering over video
+- **Automatic video detection** - Extension automatically finds all video elements on the page, including embedded `iframe` videos.
+- **Hover button** - A sleek, SVG-based PiP button appears in the top-right corner when hovering over video.
 - **Keyboard shortcuts**:
-  - `Ctrl+Alt+P` - Activates PiP for currently playing video (or first available)
-  - Double-click on video - Instant PiP activation
-- **Popup interface** - Convenient control panel from the extension icon
-- **Dynamic content support** - Automatically handles videos added after page load
-- **Multi-language support** - Support for different languages (requires locales files)
+  - `Ctrl+Shift+P` (Native) - Activates PiP for currently playing video globally across the browser. Customizable via `chrome://extensions/shortcuts`.
+  - Double-click on video - Instant PiP activation (Can be disabled).
+- **Options & Customization** - Access the options page to:
+  - Toggle the hover button visibility.
+  - Toggle the double-click functionality.
+  - Blacklist specific domains where the extension should not run (e.g., YouTube, Netflix).
+- **Popup interface** - Convenient control panel from the extension icon, including an easy shortcut to the Options page.
+- **Dynamic content support** - Automatically handles videos added after page load.
+- **Multi-language support** - English and Polish natively supported.
 
 ## 🚀 Installation
 
@@ -46,10 +50,10 @@ cd Chrome-Picture-in-Picture-Extension
 ### Method 1: Hover Button
 1. Open any page with video content
 2. Hover your mouse over the video element
-3. Click the appearing 📺 button in the top-right corner
+3. Click the appearing icon in the top-right corner
 
 ### Method 2: Keyboard Shortcut
-1. Press `Ctrl+Alt+P` at any time on a page with video
+1. Press `Ctrl+Shift+P` at any time on a page with video
 2. PiP will launch for currently playing video or first available
 
 ### Method 3: Double Click
