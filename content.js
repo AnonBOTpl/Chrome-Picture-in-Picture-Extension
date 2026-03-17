@@ -108,31 +108,6 @@ function findAndProcessVideos() {
   });
 }
 
-// Obsługa skrótu klawiszowego Ctrl+Alt+P
-document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'p') {
-    e.preventDefault();
-    const videos = document.querySelectorAll('video');
-    
-    // Znajdź aktualnie odtwarzane video lub pierwsze dostępne
-    let targetVideo = null;
-    for (let video of videos) {
-      if (!video.paused) {
-        targetVideo = video;
-        break;
-      }
-    }
-    
-    if (!targetVideo && videos.length > 0) {
-      targetVideo = videos[0];
-    }
-    
-    if (targetVideo) {
-      enterPictureInPicture(targetVideo);
-    }
-  }
-});
-
 // Podwójne kliknięcie na video = PiP
 document.addEventListener('dblclick', (e) => {
   if (e.target.tagName === 'VIDEO' && settings.enableDoubleClick) {
