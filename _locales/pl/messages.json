@@ -73,6 +73,9 @@
   "optEnableDoubleClick": {
     "message": "Podwójne kliknięcie by włączyć PiP"
   },
+  "optEnableAutoPip": {
+    "message": "Auto-PiP przy zmianie karty (Eksperymentalne)"
+  },
   "optBlacklist": {
     "message": "Czarna lista domen (jedna na linię)"
   },

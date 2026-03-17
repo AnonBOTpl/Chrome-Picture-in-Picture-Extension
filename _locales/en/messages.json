@@ -73,6 +73,9 @@
   "optEnableDoubleClick": {
     "message": "Enable double click to toggle PiP"
   },
+  "optEnableAutoPip": {
+    "message": "Auto-PiP on tab change (Experimental)"
+  },
   "optBlacklist": {
     "message": "Blacklisted domains (one per line)"
   },
