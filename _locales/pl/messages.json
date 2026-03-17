@@ -60,5 +60,26 @@
   },
   "pipTooltip": {
     "message": "Picture-in-Picture (Ctrl+Alt+P)"
+  },
+  "shortcutTogglePip": {
+    "message": "Włącz/Wyłącz Picture-in-Picture"
+  },
+  "optionsTitle": {
+    "message": "Opcje Rozszerzenia"
+  },
+  "optShowHoverBtn": {
+    "message": "Pokazuj przycisk po najechaniu na wideo"
+  },
+  "optEnableDoubleClick": {
+    "message": "Podwójne kliknięcie by włączyć PiP"
+  },
+  "optBlacklist": {
+    "message": "Czarna lista domen (jedna na linię)"
+  },
+  "optSave": {
+    "message": "Zapisz"
+  },
+  "optSavedMsg": {
+    "message": "Zapisano opcje."
   }
 }

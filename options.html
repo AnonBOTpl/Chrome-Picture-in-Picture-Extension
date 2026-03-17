@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>__MSG_optionsTitle__</title>
+  <style>
+    body {
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-width: 300px;
+    }
+    .option {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    label {
+      margin-left: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      margin-top: 5px;
+    }
+    .save-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .save-btn:hover {
+      background: #45a049;
+    }
+    #status {
+      margin-top: 10px;
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h2>__MSG_optionsTitle__</h2>
+
+  <div class="option">
+    <input type="checkbox" id="showHoverBtn">
+    <label for="showHoverBtn" id="labelShowHoverBtn">__MSG_optShowHoverBtn__</label>
+  </div>
+
+  <div class="option">
+    <input type="checkbox" id="enableDoubleClick">
+    <label for="enableDoubleClick" id="labelEnableDoubleClick">__MSG_optEnableDoubleClick__</label>
+  </div>
+
+  <div class="option" style="flex-direction: column; align-items: flex-start;">
+    <label for="blacklist" id="labelBlacklist">__MSG_optBlacklist__ (one domain per line):</label>
+    <textarea id="blacklist" placeholder="example.com&#10;youtube.com"></textarea>
+  </div>
+
+  <button class="save-btn" id="saveBtn">__MSG_optSave__</button>
+  <div id="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
