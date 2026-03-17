@@ -10,14 +10,18 @@ Rozszerzenie Chrome umożliwiające łatwe uruchamianie trybu Picture-in-Picture
 
 ## ✨ Funkcje
 
-- **Automatyczne wykrywanie video** - Rozszerzenie automatycznie znajduje wszystkie elementy video na stronie
-- **Przycisk hover** - Po najechaniu myszką na video pojawia się przycisk PiP w prawym górnym rogu
+- **Automatyczne wykrywanie video** - Rozszerzenie automatycznie znajduje wszystkie elementy video na stronie (w tym osadzone w ramkach iframe).
+- **Przycisk hover** - Nowoczesny przycisk oparty o ikony SVG pojawia się w prawym górnym rogu po najechaniu na wideo.
 - **Skróty klawiszowe**:
-  - `Ctrl+Alt+P` - Aktywuje PiP dla aktualnie odtwarzanego video (lub pierwszego dostępnego)
-  - Podwójne kliknięcie na video - Natychmiastowe uruchomienie PiP
-- **Popup interfejs** - Wygodny panel sterowania z poziomu ikony rozszerzenia
-- **Obsługa dynamicznego contentu** - Automatycznie obsługuje video dodawane po załadowaniu strony
-- **Wielojęzyczność** - Wsparcie dla różnych języków (wymagane pliki locales)
+  - `Ctrl+Shift+P` (Natywny) - Aktywuje PiP dla aktualnie odtwarzanego wideo globalnie. Konfigurowalny przez ustawienia skrótów Chrome.
+  - Podwójne kliknięcie na video - Natychmiastowe uruchomienie PiP (z opcją wyłączenia w ustawieniach).
+- **Opcje i Personalizacja** - Dedykowana strona ustawień pozwalająca na:
+  - Ukrycie przycisku najechania.
+  - Wyłączenie akcji podwójnego kliknięcia.
+  - Stworzenie "czarnej listy" domen, na których rozszerzenie ma pozostać nieaktywne (np. Netflix, YouTube).
+- **Popup interfejs** - Wygodny panel sterowania z poziomu ikony rozszerzenia, zawierający szybki skrót do Opcji.
+- **Obsługa dynamicznego contentu** - Automatycznie obsługuje video dodawane po załadowaniu strony.
+- **Wielojęzyczność** - Wbudowane natywne wsparcie dla języka angielskiego i polskiego.
 
 ## 🚀 Instalacja
 
@@ -46,10 +50,10 @@ cd Chrome-Picture-in-Picture-Extension
 ### Metoda 1: Przycisk hover
 1. Otwórz dowolną stronę z video
 2. Najedź myszką na element video
-3. Kliknij pojawiający się przycisk 📺 w prawym górnym rogu
+3. Kliknij pojawiający się przycisk ze specjalną ikoną w prawym górnym rogu
 
 ### Metoda 2: Skrót klawiszowy
-1. Naciśnij `Ctrl+Alt+P` w dowolnym momencie na stronie z video
+1. Naciśnij `Ctrl+Shift+P` w dowolnym momencie na stronie z video
 2. PiP uruchomi się dla aktualnie odtwarzanego video lub pierwszego dostępnego
 
 ### Metoda 3: Podwójne kliknięcie

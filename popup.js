@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const activateBtn = document.getElementById('activatePiP');
   const findBtn = document.getElementById('findVideos');
+  const optionsBtn = document.getElementById('openOptions');
   const status = document.getElementById('status');
 
   function initializeTexts() {
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('popupHeader').textContent = chrome.i18n.getMessage('popupHeader');
     document.getElementById('activatePiP').textContent = chrome.i18n.getMessage('activatePipButton');
     document.getElementById('findVideos').textContent = chrome.i18n.getMessage('findVideosButton');
+    document.getElementById('openOptionsText').textContent = chrome.i18n.getMessage('optionsTitle') || 'Options';
     document.getElementById('howToUseLabel').textContent = chrome.i18n.getMessage('howToUse');
     document.getElementById('shortcutCtrlAltPLabel').textContent = chrome.i18n.getMessage('shortcutCtrlAltP');
     document.getElementById('shortcutDoubleClickLabel').textContent = chrome.i18n.getMessage('shortcutDoubleClick');
@@ -104,6 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       updateStatus('errorMessage');
       console.error('Error:', error);
+    }
+  });
+  optionsBtn.addEventListener('click', () => {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL('options.html'));
     }
   });
 });
