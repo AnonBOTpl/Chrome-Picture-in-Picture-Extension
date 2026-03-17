@@ -44,13 +44,23 @@ function addPiPButton(video) {
   video.parentNode.appendChild(buttonContainer);
 
   // Pokaż przycisk po najechaniu na video
-  video.addEventListener('mouseenter', () => {
-    buttonContainer.style.opacity = '1';
-  });
+  let hideTimeout;
 
-  video.addEventListener('mouseleave', () => {
-    buttonContainer.style.opacity = '0';
-  });
+  const showButton = () => {
+    clearTimeout(hideTimeout);
+    buttonContainer.style.opacity = '1';
+  };
+
+  const hideButton = () => {
+    hideTimeout = setTimeout(() => {
+      buttonContainer.style.opacity = '0';
+    }, 100);
+  };
+
+  video.addEventListener('mouseenter', showButton);
+  video.addEventListener('mouseleave', hideButton);
+  buttonContainer.addEventListener('mouseenter', showButton);
+  buttonContainer.addEventListener('mouseleave', hideButton);
 }
 
 // Znajdź wszystkie video na stronie
