@@ -38,7 +38,9 @@ function updateSettings(callback) {
 
 function isDomainBlacklisted() {
   const currentDomain = window.location.hostname;
-  return settings.blacklist.some(domain => currentDomain.includes(domain));
+  return settings.blacklist.some(domain =>
+    currentDomain === domain || currentDomain.endsWith('.' + domain)
+  );
 }
 
 // Funkcja do dodawania przycisku PiP do video
@@ -179,3 +181,8 @@ observer.observe(document.body, {
 
 // Uruchom po załadowaniu
 setTimeout(findAndProcessVideos, 1000);
+
+// Export for testing
+if (typeof module !== 'undefined') {
+  module.exports = { isDomainBlacklisted, settings };
+}

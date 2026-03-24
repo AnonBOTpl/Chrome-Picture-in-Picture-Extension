@@ -1,0 +1,13 @@
+{
+  "name": "chrome-pip-extension",
+  "version": "1.0.0",
+  "description": "Chrome Picture-in-Picture Extension",
+  "main": "content.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
