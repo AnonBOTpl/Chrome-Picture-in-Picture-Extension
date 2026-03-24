@@ -55,7 +55,7 @@ function addPiPButton(video) {
   // Stwórz kontener dla przycisku
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'pip-button-container';
-  
+
   const button = document.createElement('button');
   button.className = 'pip-button';
   button.innerHTML = `
@@ -64,10 +64,10 @@ function addPiPButton(video) {
       <rect x="12" y="12" width="7" height="7" rx="1" ry="1"></rect>
     </svg>
   `;
-  
+
   // Użyj tłumaczenia dla tooltip
   button.title = chrome.i18n.getMessage('pipTooltip');
-  
+
   button.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -75,7 +75,7 @@ function addPiPButton(video) {
   });
 
   buttonContainer.appendChild(button);
-  
+
   // Pozycjonuj przycisk względem video
   video.parentNode.style.position = 'relative';
   video.parentNode.appendChild(buttonContainer);
@@ -102,8 +102,8 @@ function addPiPButton(video) {
 
 // Znajdź wszystkie video na stronie
 function findAndProcessVideos() {
-  const videos = document.querySelectorAll('video');
-  videos.forEach(video => {
+  const videos = document.getElementsByTagName('video');
+  Array.prototype.forEach.call(videos, video => {
     addPiPButton(video);
   });
 }
@@ -126,17 +126,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
 // Nasłuchuj wiadomości od background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'togglePiP') {
-    const videos = document.querySelectorAll('video');
-    let targetVideo = null;
-    for (let video of videos) {
-      if (!video.paused) {
-        targetVideo = video;
-        break;
-      }
-    }
-    if (!targetVideo && videos.length > 0) {
-      targetVideo = videos[0];
-    }
+    const videos = document.getElementsByTagName('video');
+    const targetVideo = Array.prototype.find.call(videos, v => !v.paused) || videos[0];
     if (targetVideo) {
       enterPictureInPicture(targetVideo);
     }
@@ -155,21 +146,21 @@ if (document.readyState === 'loading') {
 
 // Uruchom dla dynamicznie dodawanego contentu
 const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    mutation.addedNodes.forEach((node) => {
+  for (let i = 0; i < mutations.length; i++) {
+    const mutation = mutations[i];
+    for (let j = 0; j < mutation.addedNodes.length; j++) {
+      const node = mutation.addedNodes[j];
       if (node.nodeType === 1) { // Element node
         if (node.tagName === 'VIDEO') {
           addPiPButton(node);
-        } else {
+        } else if (node.getElementsByTagName) {
           // Sprawdź czy w dodanym elemencie są video
-          const videos = node.querySelectorAll && node.querySelectorAll('video');
-          if (videos) {
-            videos.forEach(video => addPiPButton(video));
-          }
+          const videos = node.getElementsByTagName('video');
+          Array.prototype.forEach.call(videos, video => addPiPButton(video));
         }
       }
-    });
-  });
+    }
+  }
 });
 
 observer.observe(document.body, {
