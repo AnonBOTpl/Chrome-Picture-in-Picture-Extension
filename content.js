@@ -153,23 +153,32 @@ if (document.readyState === 'loading') {
   updateSettings(findAndProcessVideos);
 }
 
+const IGNORED_TAGS = new Set(['SCRIPT', 'STYLE', 'LINK', 'META', 'NOSCRIPT']);
+
+// Przetwarzaj dodany węzeł
+function processNode(node) {
+  if (node.nodeType !== 1 || IGNORED_TAGS.has(node.tagName)) {
+    return;
+  }
+
+  if (node.tagName === 'VIDEO') {
+    addPiPButton(node);
+  } else if (node.getElementsByTagName) {
+    const videos = node.getElementsByTagName('video');
+    for (let i = 0; i < videos.length; i++) {
+      addPiPButton(videos[i]);
+    }
+  }
+}
+
 // Uruchom dla dynamicznie dodawanego contentu
 const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    mutation.addedNodes.forEach((node) => {
-      if (node.nodeType === 1) { // Element node
-        if (node.tagName === 'VIDEO') {
-          addPiPButton(node);
-        } else {
-          // Sprawdź czy w dodanym elemencie są video
-          const videos = node.querySelectorAll && node.querySelectorAll('video');
-          if (videos) {
-            videos.forEach(video => addPiPButton(video));
-          }
-        }
-      }
-    });
-  });
+  for (let i = 0; i < mutations.length; i++) {
+    const addedNodes = mutations[i].addedNodes;
+    for (let j = 0; j < addedNodes.length; j++) {
+      processNode(addedNodes[j]);
+    }
+  }
 });
 
 observer.observe(document.body, {
