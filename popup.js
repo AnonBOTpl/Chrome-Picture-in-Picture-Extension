@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Inicjalizacja tekstów w języku użytkownika
   initializeTexts();
-  
+
   const activateBtn = document.getElementById('activatePiP');
   const findBtn = document.getElementById('findVideos');
   const optionsBtn = document.getElementById('openOptions');
@@ -34,26 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
   activateBtn.addEventListener('click', async () => {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      
+
       const result = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: () => {
-          const videos = document.querySelectorAll('video');
-          let targetVideo = null;
-          
-          // Znajdź odtwarzane video
-          for (let video of videos) {
-            if (!video.paused) {
-              targetVideo = video;
-              break;
-            }
-          }
-          
-          // Jeśli nic się nie odtwarza, weź pierwsze video
-          if (!targetVideo && videos.length > 0) {
-            targetVideo = videos[0];
-          }
-          
+          const videos = document.getElementsByTagName('video');
+
+          // Znajdź odtwarzane video lub weź pierwsze
+          const targetVideo = Array.prototype.find.call(videos, v => !v.paused) || videos[0];
+
           if (targetVideo) {
             if (document.pictureInPictureEnabled && !targetVideo.disablePictureInPicture) {
               targetVideo.requestPictureInPicture()
@@ -68,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
-      
+
       const response = result[0].result;
       updateStatus(response.key);
     } catch (error) {
@@ -81,28 +70,28 @@ document.addEventListener('DOMContentLoaded', () => {
   findBtn.addEventListener('click', async () => {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      
+
       const result = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: () => {
-          const videos = document.querySelectorAll('video');
+          const videos = document.getElementsByTagName('video');
           return {
             count: videos.length,
-            playing: Array.from(videos).filter(v => !v.paused).length
+            playing: Array.prototype.reduce.call(videos, (acc, v) => v.paused ? acc : acc + 1, 0)
           };
         }
       });
-      
+
       const { count, playing } = result[0].result;
-      
+
       // Użyj placeholder do podstawienia liczb w tłumaczeniu
       const message = chrome.i18n.getMessage('videosFound', [count.toString(), playing.toString()]);
       status.textContent = message;
-      
+
       setTimeout(() => {
         status.textContent = chrome.i18n.getMessage('statusReady');
       }, 3000);
-      
+
     } catch (error) {
       updateStatus('errorMessage');
       console.error('Error:', error);
