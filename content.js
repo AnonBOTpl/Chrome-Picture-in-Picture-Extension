@@ -125,6 +125,11 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 // Nasłuchuj wiadomości od background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // Walidacja nadawcy - upewnij się, że wiadomość pochodzi z tego samego rozszerzenia
+  if (sender.id !== chrome.runtime.id) {
+    return;
+  }
+
   if (request.action === 'togglePiP') {
     const videos = document.querySelectorAll('video');
     let targetVideo = null;
